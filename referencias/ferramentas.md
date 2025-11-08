@@ -1,0 +1,4 @@
+FERRAMENTAS USADAS:
+- Figma
+- Drawio
+- 
