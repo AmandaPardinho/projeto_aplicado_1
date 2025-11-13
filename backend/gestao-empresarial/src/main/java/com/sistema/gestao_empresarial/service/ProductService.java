@@ -1,5 +1,6 @@
 package com.sistema.gestao_empresarial.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public interface ProductService {
 
     void deleteById(Long id);
 
-    Product calculateSellingPrice(Product product);
+    Product calculateSellingPrice(Product product, BigDecimal profit);
 
     Optional<Product> findByBarcode(String barcode);
 

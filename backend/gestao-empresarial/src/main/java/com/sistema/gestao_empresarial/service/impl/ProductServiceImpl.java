@@ -1,5 +1,6 @@
 package com.sistema.gestao_empresarial.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product product) {
-        if (product.getId() == null){
-            productRepository.findByBarcode(product.getBarcode()).ifPresent(p ->{ throw new RuntimeException("Já existe um produto com este código de barras")});
+        if (product.getId() == null) {
+            productRepository.findByBarcode(product.getBarcode())
+                    .ifPresent(p -> {
+                        throw new RuntimeException("Já existe um produto com este código de barras");
+                    });
 
         }
         return productRepository.save(product);
@@ -40,44 +44,48 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        productRepository.delete(product);
     }
 
     @Override
-    public void deleteById(Long Id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
     }
 
     @Override
-    public Product calculateSellingPrice(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateSellingPrice'");
+    public Product calculateSellingPrice(Product product, BigDecimal profit) {
+        if (profit.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("A margem de lucro não pode ser negativa");
+        }
+
+        if (product.getPurchasePrice() == null) {
+            throw new IllegalArgumentException("O preço de compra não pode ser nulo");
+        }
+
+        BigDecimal sellingPrice = product.getPurchasePrice()
+                .multiply(BigDecimal.ONE.add(profit));
+        product.setSellingPrice(sellingPrice);
+        return product;
     }
 
     @Override
     public Optional<Product> findByBarcode(String barcode) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByBarcode'");
+        return productRepository.findByBarcode(barcode);
     }
 
     @Override
     public List<Product> findByNameContainingIgnoreCase(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByNameContainingIgnoreCase'");
+        return productRepository.findByNameContainingIgnoreCase(name);
     }
 
     @Override
     public List<Product> findByActiveTrue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByActiveTrue'");
+        return productRepository.findByActiveTrue();
     }
 
     @Override
     public List<Product> findByStockLessThenEqual(Integer quantity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByStockLessThenEqual'");
+        return productRepository.findByStockLessThenEqual(quantity);
     }
 
 }
