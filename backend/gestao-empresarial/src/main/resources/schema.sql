@@ -6,6 +6,6 @@ CREATE TABLE products(
     purchase_price DECIMAL(15, 2) NOT NULL,
     selling_price DECIMAL(15, 2) NOT NULL,
     stock_quantity INT NOT NULL,
-    created_at DATETIME2 NOT NULL,
-    updated_at DATETIME2
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME
 )
